@@ -1,0 +1,7 @@
+# ignore local environment variable file
+.env
+
+# ingore built executables
+bin/
+
+out
