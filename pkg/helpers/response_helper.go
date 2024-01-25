@@ -3,7 +3,6 @@ package helpers
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"zoomies-api-go/pkg/models"
 )
 
@@ -15,7 +14,8 @@ func SendSuccessResponse(w http.ResponseWriter, message string, data interface{}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
-	w.Write([]byte(strconv.Itoa(http.StatusOK)))
+	w.WriteHeader(http.StatusOK)
+	return
 }
 
 func SendErrorResponse(w http.ResponseWriter, message string, errorCode string) {

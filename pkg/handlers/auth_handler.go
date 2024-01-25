@@ -15,16 +15,22 @@ type AuthHandler struct {
 	userRepo repository.UserRepository
 }
 
+var err error
+
 func NewAuthHandler(userRepo repository.UserRepository) *AuthHandler {
 	return &AuthHandler{userRepo: userRepo}
 }
 
 func (h *AuthHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.LoginDto
+
 	err := json.NewDecoder(r.Body).Decode(&user)
+
 	if err != nil {
 		helpers.SendErrorResponse(w, err.Error(), constants.BadRequest)
 	}
+
+	helpers.ValidateStruct(w, &user)
 
 	storedUser, err := h.userRepo.FindByEmail(user.Email)
 
@@ -48,11 +54,15 @@ func (h *AuthHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	var user models.User
+	var user models.RegisterDto
+
 	err := json.NewDecoder(r.Body).Decode(&user)
+
 	if err != nil {
 		helpers.SendErrorResponse(w, err.Error(), constants.BadRequest)
 	}
+
+	helpers.ValidateStruct(w, &user)
 
 	hashedPassword, err := helpers.HashPassword(user.Password)
 
@@ -60,9 +70,14 @@ func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		helpers.SendErrorResponse(w, err.Error(), constants.InternalServerError)
 	}
 
-	user.Password = hashedPassword
+	tmp := models.User{
+		Email:     user.Email,
+		Password:  hashedPassword,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}
 
-	err = h.userRepo.Save(&user)
+	err = h.userRepo.Save(&tmp)
 
 	if err != nil {
 		helpers.SendErrorResponse(w, err.Error(), constants.InternalServerError)

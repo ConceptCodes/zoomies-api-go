@@ -31,6 +31,7 @@ func main() {
 
 	router := mux.NewRouter()
 
+	router.Use(middlewares.TraceRequest)
 	router.Use(middlewares.LogRequest)
 	router.Use(middlewares.LogResponse)
 
