@@ -98,11 +98,11 @@ To get this API up and running, follow these steps:
 
 4. Configure environment variables:
 
-   - Create a `.env` file based on the provided `.env.example`.
+   - Create a `config.json` file based on the provided example file.
    - Fill in the required configuration values.
 
    ```sh
-   cp .env.example .env
+   cp example.json config.json
    ```
 
 5. Run DB Migration:

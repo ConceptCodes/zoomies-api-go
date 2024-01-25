@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Port          string            `mapstructure:"port"`
+	Port          int               `mapstructure:"port"`
 	SessionSecret string            `mapstructure:"session_secret"`
 	Jwt           *models.JwtConfig `mapstructure:"jwt"`
 	DB            *models.DBConfig  `mapstructure:"db"`

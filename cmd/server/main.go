@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/fatih/color"
 	"github.com/gorilla/mux"
@@ -25,7 +25,9 @@ func main() {
 	}
 
 	userRepo := repository.NewGormUserRepository(db)
+
 	authHandler := handlers.NewAuthHandler(userRepo)
+	healthHandler := handlers.NewHealthHandler()
 
 	router := mux.NewRouter()
 
@@ -35,10 +37,12 @@ func main() {
 	router.HandleFunc("/auth/login", authHandler.LoginHandler).Methods("POST")
 	router.HandleFunc("/auth/register", authHandler.RegisterHandler).Methods("POST")
 
-	router.HandleFunc("/health/alive", handlers.NewHealthHandler().ServiceAliveHandler).Methods("GET")
+	router.HandleFunc("/health/alive", healthHandler.ServiceAliveHandler).Methods("GET")
 
-	color.Green("Zoomies Api started on port %s", config.AppConfig.Port)
+	port := strconv.Itoa(config.AppConfig.Port)
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", config.AppConfig.Port), nil))
+	color.Green("Zoomies Api started on port %s", port)
+
+	log.Fatal(http.ListenAndServe(":"+port, router))
 
 }

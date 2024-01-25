@@ -20,18 +20,22 @@ func GenerateToken(userId uint, email string) (string, error) {
 	return claims.SignedString([]byte("secret"))
 }
 
-func ValidateToken(tokenStr string) (*jwt.Token, error) {
+func ValidateToken(tokenStr string) (*models.SimpleUser, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &models.Jwt{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("AllYourBase"), nil
 	})
+
+	user := &models.SimpleUser{}
 
 	if err != nil {
 		log.Fatal(err)
 	} else if claims, ok := token.Claims.(*models.Jwt); ok {
 		fmt.Println(claims.ID, claims.RegisteredClaims.Issuer)
+		user.ID = claims.ID
+		user.Email = claims.Email
 	} else {
 		log.Fatal("unknown claims type, cannot proceed")
 	}
 
-	return token, err
+	return user, nil
 }
