@@ -35,10 +35,10 @@ func main() {
 	router.Use(middlewares.LogRequest)
 	router.Use(middlewares.LogResponse)
 
-	router.HandleFunc("/auth/login", authHandler.LoginHandler).Methods("POST")
-	router.HandleFunc("/auth/register", authHandler.RegisterHandler).Methods("POST")
+	router.HandleFunc("/api/auth/login", authHandler.LoginHandler).Methods("POST")
+	router.HandleFunc("/api/auth/register", authHandler.RegisterHandler).Methods("POST")
 
-	router.HandleFunc("/health/alive", healthHandler.ServiceAliveHandler).Methods("GET")
+	router.HandleFunc("/api/health/alive", healthHandler.ServiceAliveHandler).Methods("GET")
 
 	port := strconv.Itoa(config.AppConfig.Port)
 

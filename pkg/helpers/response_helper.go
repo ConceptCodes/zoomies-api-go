@@ -15,7 +15,6 @@ func SendSuccessResponse(w http.ResponseWriter, message string, data interface{}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 	w.WriteHeader(http.StatusOK)
-	return
 }
 
 func SendErrorResponse(w http.ResponseWriter, message string, errorCode string) {
@@ -37,5 +36,4 @@ func SendErrorResponse(w http.ResponseWriter, message string, errorCode string) 
 	case "ZM-500":
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	return
 }
