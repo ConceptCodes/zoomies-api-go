@@ -83,5 +83,5 @@ func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		helpers.SendErrorResponse(w, err.Error(), constants.InternalServerError)
 	}
 
-	helpers.SendSuccessResponse(w, constants.RegistrationSuccessful, helpers.GetSimpleUser(user))
+	helpers.SendSuccessResponse(w, constants.RegistrationSuccessful, helpers.GetSimpleUser(tmp))
 }
